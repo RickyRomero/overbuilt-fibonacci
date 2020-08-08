@@ -5,21 +5,25 @@
       "name": "frontend",
       "image": "rickyromero/obfib-frontend",
       "hostname": "frontend",
-      "essential": false
+      "essential": false,
+      "memory": 64
     }, {
       "name": "backend",
       "image": "rickyromero/obfib-backend",
       "hostname": "backend",
-      "essential": false
+      "essential": false,
+      "memory": 128
     }, {
       "name": "worker",
       "image": "rickyromero/obfib-worker",
       "hostname": "worker",
-      "essential": false
+      "essential": false,
+      "memory": 128
     }, {
       "name": "web",
       "image": "rickyromero/obfib-web",
       "essential": true,
+      "memory": 64,
       "portMappings": [
         {
           "hostPort": 80,
