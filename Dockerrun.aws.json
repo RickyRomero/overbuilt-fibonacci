@@ -1,0 +1,32 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "frontend",
+      "image": "rickyromero/obfib-frontend",
+      "hostname": "frontend",
+      "essential": false
+    }, {
+      "name": "backend",
+      "image": "rickyromero/obfib-backend",
+      "hostname": "backend",
+      "essential": false
+    }, {
+      "name": "worker",
+      "image": "rickyromero/obfib-worker",
+      "hostname": "worker",
+      "essential": false
+    }, {
+      "name": "web",
+      "image": "rickyromero/obfib-web",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": [ "frontend", "backend" ]
+    }
+  ]
+}
