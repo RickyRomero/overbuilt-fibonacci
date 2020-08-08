@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  database:
+    image: 'postgres:alpine'
+    environment:
+      - 'POSTGRES_PASSWORD=postgres_password'
+    restart: 'unless-stopped'
+
+  cache:
+    image: 'redis:alpine'
+    restart: 'unless-stopped'
+
+  web:
+    depends_on:
+      - 'backend'
+      - 'frontend'
+    build:
+      context: './web/'
+      dockerfile: 'Dockerfile.dev'
+    ports:
+      - '8080:80'
+    restart: 'unless-stopped'
+
+  backend:
+    depends_on:
+      - 'cache'
+      - 'database'
+    build:
+      context: './backend/'
+      dockerfile: 'Dockerfile.dev'
+    environment:
+      - 'REDIS_HOST=cache'
+      - 'REDIS_PORT=6379'
+      - 'PG_USER=postgres'
+      - 'PG_PASSWORD=postgres_password'
+      - 'PG_HOST=database'
+      - 'PG_PORT=5432'
+      - 'PG_DATABASE=postgres'
+    volumes:
+      - '/usr/app/node_modules/'
+      - './backend/src/:/usr/app/'
+    restart: 'unless-stopped'
+
+  frontend:
+    build:
+      context: './frontend/'
+      dockerfile: 'Dockerfile.dev'
+    volumes:
+      - '/usr/app/node_modules/'
+      - './frontend/src/:/usr/app/'
+    stdin_open: true
+    restart: 'unless-stopped'
+
+  worker:
+    depends_on:
+      - 'cache'
+    build:
+      context: './worker/'
+      dockerfile: 'Dockerfile.dev'
+    environment:
+      - 'REDIS_HOST=cache'
+      - 'REDIS_PORT=6379'
+    volumes:
+      - '/usr/app/node_modules/'
+      - './worker/src/:/usr/app/'
+    restart: 'unless-stopped'
