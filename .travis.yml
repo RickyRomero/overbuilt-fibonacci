@@ -1,0 +1,29 @@
+sudo: 'required'
+language: 'generic'
+
+services:
+  - 'docker'
+
+before_install:
+  - 'docker build -t rickyromero/react-test -f ./frontend/Dockerfile.dev ./frontend/'
+  # You can add other projects if needed
+
+script:
+  - 'docker run -e CI=true rickyromero/react-test yarn test'
+  # You can add other test suites if needed
+
+after_success:
+  # Build images for deployment
+  - 'docker build -t rickyromero/obfib-frontend ./frontend'
+  - 'docker build -t rickyromero/obfib-backend ./backend'
+  - 'docker build -t rickyromero/obfib-worker ./worker'
+  - 'docker build -t rickyromero/obfib-web ./web'
+
+  # Authorize with Docker Hub
+  - 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin'
+
+  # Push images to Docker Hub
+  - 'docker push rickyromero/obfib-frontend'
+  - 'docker push rickyromero/obfib-backend'
+  - 'docker push rickyromero/obfib-worker'
+  - 'docker push rickyromero/obfib-web'

@@ -12,6 +12,8 @@ CMD ["yarn", "build"]
 
 
 FROM nginx:alpine
+EXPOSE 3000
+
 WORKDIR '/etc/nginx/conf.d/'
 COPY './nginx/default.conf' './default.conf'
 
