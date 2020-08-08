@@ -6,8 +6,7 @@ COPY './src/yarn.lock' './'
 RUN yarn
 
 COPY './src/' './'
-
-CMD ["yarn", "build"]
+RUN yarn build
 
 
 
