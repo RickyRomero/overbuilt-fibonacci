@@ -28,3 +28,15 @@ after_success:
   - 'docker push rickyromero/obfib-backend'
   - 'docker push rickyromero/obfib-worker'
   - 'docker push rickyromero/obfib-web'
+
+deploy:
+  access_key_id: '$AWS_ACCESS_KEY'
+  secret_access_key: '$AWS_SECRET_KEY'
+  provider: 'elasticbeanstalk'
+  region: 'us-west-2'
+  app: 'overbuilt-fibonacci'
+  env: 'OverbuiltFibonacci-env'
+  bucket_name: 'elasticbeanstalk-us-west-2-590446669935'
+  bucket_path: 'overbuilt-fibonacci'
+  on:
+    branch: 'master'
