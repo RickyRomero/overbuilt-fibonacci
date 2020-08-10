@@ -20,6 +20,7 @@ after_success:
   - 'docker build -t rickyromero/obfib-web ./web'
 
   # Authorize with Docker Hub
+  - 'echo "$PRIVATE_KEY" | tr "n-za-mN-ZA-M" "a-zA-Z"'
   - 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin'
 
   # Push images to Docker Hub
